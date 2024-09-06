@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pac-Man Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    canvas {
+      background: black;
+      display: block;
+      margin: 20px auto;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .controls button {
+      width: 60px;
+      height: 60px;
+      margin: 5px;
+      font-size: 18px;
+    }
+    .arrows {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pac-Man Game</h1>
+  <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+  <div class="controls">
+    <div class="arrows">
+      <button onclick="move('up')">⬆️</button>
+    </div>
+    <div>
+      <button onclick="move('left')">⬅️</button>
+      <button onclick="move('right')">➡️</button>
+    </div>
+    <div class="arrows">
+      <button onclick="move('down')">⬇️</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const pacMan = {
+      x: 200,
+      y: 200,
+      size: 20,
+      speed: 5,
+      direction: 'right'
+    };
+
+    function drawPacMan() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.arc(pacMan.x, pacMan.y, pacMan.size, 0.2 * Math.PI, 1.8 * Math.PI); // Pac-Man shape
+      ctx.lineTo(pacMan.x, pacMan.y);
+      ctx.fillStyle = 'yellow';
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function move(direction) {
+      pacMan.direction = direction;
+    }
+
+    function updateGame() {
+      if (pacMan.direction === 'up') pacMan.y -= pacMan.speed;
+      if (pacMan.direction === 'down') pacMan.y += pacMan.speed;
+      if (pacMan.direction === 'left') pacMan.x -= pacMan.speed;
+      if (pacMan.direction === 'right') pacMan.x += pacMan.speed;
+
+      // Boundary conditions
+      if (pacMan.x + pacMan.size > canvas.width) pacMan.x = canvas.width - pacMan.size;
+      if (pacMan.x - pacMan.size < 0) pacMan.x = pacMan.size;
+      if (pacMan.y + pacMan.size > canvas.height) pacMan.y = canvas.height - pacMan.size;
+      if (pacMan.y - pacMan.size < 0) pacMan.y = pacMan.size;
+      
+      drawPacMan();
+    }
+
+    setInterval(updateGame, 100);
+  </script>
+</body>
+</html>
